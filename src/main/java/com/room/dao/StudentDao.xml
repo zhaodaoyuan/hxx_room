@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.room.dao.StudentDao">
+	<select id="majorList" resultType="Major">
+		select * from major
+	</select>
+	<insert id="insertstudent">
+		insert into student values(null,#{student_num},#{student_name},#{student_sex},#{major_id},#{student_phone},#{student_adress},0)
+	</insert>
+	<select id="selectstudentList" resultType="Student">
+		select * from student s join major m on s.major_id=m.major_id where 1=1
+		<if test="student_name!=null and student_name!=''"> and s.student_name like '%${student_name}%'</if>	
+		<if test="student_num!=null and student_num!=''"> and s.student_num like '%${student_num}%'</if>	
+	</select>
+	
+	<delete id="delstudent">
+		delete from student where student_id=#{id}
+	</delete>
+	<select id="selectstudentById" resultType="Student">
+		select * from student s join major m on s.major_id=m.major_id where student_id=#{id}
+	</select>
+	<select id="selectstudentByroomId" resultType="Student">
+		select * from student_room sr join student s on sr.student_id=s.student_id join major m on m.major_id=s.major_id join bed b on sr.bed_id=b.bed_id  where sr.room_id=#{id}
+	</select>
+	<update id="doupdatesutdent">
+		update student set student_name=#{student_name},student_num=#{student_num},student_sex=#{student_sex},student_phone=#{student_phone},student_adress=#{student_adress},major_id=#{major_id}
+		<if test="status!=null and status!=''"> ,status=#{status} </if>
+		 where student_id=#{student_id}
+	</update>
+</mapper>

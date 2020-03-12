@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.room.dao.RoomDao">
+	<select id="buildlist" resultType="Build">
+		select * from build
+	</select>
+	<select id="selectstudent_room" resultType="Student_room">
+		select * from student_room where room_id=#{room_id} and bed_id=#{bed_id}
+	</select>
+	<insert id="insertroom">
+		insert into room values(null,#{room_num},#{build_id},#{room_size},0)
+	</insert>
+	<delete id="delroom">
+		delete from room where room_id=#{room_id}
+	</delete>
+	<delete id="delinto">
+		delete from student_room where student_id=#{id}
+	</delete>
+	<select id="selectlistroom" resultType="Room">
+		select * from room r join build b on r.build_id=b.build_id where 1=1
+		<if test="build_id!=null and build_id!=''"> and b.build_id=#{build_id}</if>
+	</select>
+	<select id="selectajax" resultType="Room">
+		select * from room r join build b on r.build_id=b.build_id  where r.build_id=#{id} and <![CDATA[r.real_size<8 ]]>
+		
+	</select>
+	<select id="selectroomById" resultType="Room">
+		select * from room r join build b on r.build_id=b.build_id where room_id=#{id}
+	</select>
+	<update id="roomupdate">
+		update room set room_num=#{room_num},build_id=#{build_id},room_size=#{room_size}
+		
+		<if test="real_size!=null and real_size!=''">,real_size=#{real_size} </if>
+		 where room_id=#{room_id}
+	</update>
+	<select id="bedlist" resultType="Bed">
+		select * from bed
+	</select>
+	<insert id="insertStudent_Room">
+		insert into student_room value(null,#{room_id},#{bed_id},#{student_id})
+	</insert>
+	
+	<select id="selectintoById" resultType="Room">
+		select * from student_room sr join room  r on r.room_id=sr.room_id where sr.student_id=#{id}
+	</select>
+	
+	
+	<insert id="doaddRepair">
+		insert into repair values(null,#{room_id},#{repair_message})
+	</insert>
+	
+	<delete id="delrepair">
+		delete from repair where repair_id=#{id}
+	</delete>
+	
+	
+	<update id="upstudent">
+		update room set real_size=real_size+1 where room_id=#{id}
+	</update>
+	
+	<update id="downstudent">
+		update room set real_size=real_size-1 where room_id=#{id}
+	</update>
+	
+	<select id="selectRepair" resultType="Repair">
+		select * from repair rp join room r on r.room_id=rp.room_id join build b on  r.build_id= b.build_id
+	</select>
+</mapper>

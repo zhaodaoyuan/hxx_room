@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.room.dao.RuleDao">
+	<select id="selectrule" resultType="Rule">
+		select * from rule r join student s on r.student_id=s.student_id join rule_type rt on r.type_id=rt.type_id
+		<if test="student_name!=null and student_name!=''"> and s.student_name like '%${student_name}%'</if>	
+	</select>
+	<select id="selectTypeList" resultType="RuleType">
+		select * from rule_type
+	</select>
+	<insert id="doadd">
+		insert into rule values(null,#{student_id},#{type_id},#{created})
+	</insert>
+	<delete id="delrule">
+		delete from rule where rule_id=#{id}
+	</delete>
+</mapper>
